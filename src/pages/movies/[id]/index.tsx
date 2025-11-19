@@ -2,9 +2,14 @@ import { GetStaticProps, GetStaticPaths } from 'next';
 import { getMovieDetails, getPopularMovies } from '../../../lib/tmdb';
 import Link from 'next/link';
 import { useState } from 'react';
-import { Button } from '@/components/Button';
+import { Button } from '../../../components/Button';
+import { MovieDetailsWithCredits, Movie, Video, CastMember, Genre, ProductionCompany, ProductionCountry } from '../../../types';
 
-export default function MovieDetail({ movie }: any) {
+interface MovieDetailProps {
+  movie: MovieDetailsWithCredits;
+}
+
+export default function MovieDetail({ movie }: MovieDetailProps) {
   const [showModal, setShowModal] = useState(false);
   const [modalVideoKey, setModalVideoKey] = useState('');
 
@@ -203,8 +208,8 @@ export default function MovieDetail({ movie }: any) {
     textAlign: 'center',
   };
 
-  const mainTrailer = movie.videos?.results.find((video: any) => video.type === 'Trailer' && video.site === 'YouTube');
-  const otherVideos = movie.videos?.results.filter((video: any) => video.type !== 'Trailer' && video.site === 'YouTube');
+  const mainTrailer = movie.videos?.results.find((video: Video) => video.type === 'Trailer' && video.site === 'YouTube');
+  const otherVideos = movie.videos?.results.filter((video: Video) => video.type !== 'Trailer' && video.site === 'YouTube');
 
   return (
     <div style={{ backgroundColor:'black',
@@ -250,7 +255,7 @@ export default function MovieDetail({ movie }: any) {
               <div>
                 <strong style={infoItemTitleStyle}>Genres:</strong>
                 <p style={infoItemContentStyle}>
-                  {movie.genres?.map((g: any) => g.name).join(', ')}
+                  {movie.genres?.map((g: Genre) => g.name).join(', ')}
                 </p>
               </div>
               <div>
@@ -263,7 +268,7 @@ export default function MovieDetail({ movie }: any) {
                 <div>
                   <strong style={infoItemTitleStyle}>Production:</strong>
                   <p style={infoItemContentStyle}>
-                    {movie.production_companies.map((company: any) => company.name).join(', ')}
+                    {movie.production_companies.map((company: ProductionCompany) => company.name).join(', ')}
                   </p>
                 </div>
               )}
@@ -271,7 +276,7 @@ export default function MovieDetail({ movie }: any) {
                 <div>
                   <strong style={infoItemTitleStyle}>Country:</strong>
                   <p style={infoItemContentStyle}>
-                    {movie.production_countries.map((country: any) => country.iso_3166_1).join(', ')}
+                    {movie.production_countries.map((country: ProductionCountry) => country.iso_3166_1).join(', ')}
                   </p>
                 </div>
               )}
@@ -283,7 +288,7 @@ export default function MovieDetail({ movie }: any) {
           <div style={{ marginTop: '50px' }}>
             <h2 style={sectionTitleStyle}>Top Cast</h2>
             <div style={castGridStyle}>
-              {movie.credits.cast.slice(0, 8).map((person: any) => (
+              {movie.credits.cast.slice(0, 8).map((person: CastMember) => (
                 <div key={person.id} style={castItemStyle}>
                   <img 
                     src={person.profile_path 
@@ -319,7 +324,7 @@ export default function MovieDetail({ movie }: any) {
           <div style={{ marginTop: 'clamp(40px, 6vw, 50px)' }}>
             <h2 style={sectionTitleStyle}>Other Clips & Videos</h2>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 300px), 1fr))', gap: 'clamp(15px, 3vw, 20px)' }}>
-              {otherVideos.map((video: any) => (
+              {otherVideos.map((video: Video) => (
                 <div 
                   key={video.key} 
                   style={{
@@ -417,7 +422,7 @@ export default function MovieDetail({ movie }: any) {
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const data = await getPopularMovies();
-  const paths = (data.results || []).map((movie: any) => ({
+  const paths = (data.results || []).map((movie: Movie) => ({
     params: { id: movie.id.toString() },
   }));
 

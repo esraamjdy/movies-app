@@ -5,7 +5,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState, useEffect, useMemo } from 'react';
 import { Button } from '../../components/Button'; 
-import { FilterButton } from '../../components/FilterButton'; 
+import { FilterButton } from '../../components/FilterButton';
+import { Movie } from '../../types'; 
 
 const MOVIES_PER_PAGE = 12;
 
@@ -39,7 +40,11 @@ function extractFirstLetter(title: string): string {
   return '';
 }
 
-export default function MoviesPage({ allMovies: initialMovies }: any) {
+interface MoviesPageProps {
+  allMovies: Movie[];
+}
+
+export default function MoviesPage({ allMovies: initialMovies }: MoviesPageProps) {
   const router = useRouter();
   const [currentPage, setCurrentPage] = useState(1);
   const [filterLetter, setFilterLetter] = useState('');
@@ -65,7 +70,7 @@ export default function MoviesPage({ allMovies: initialMovies }: any) {
       return movies;
     }
     
-    return movies.filter((movie: any) => {
+    return movies.filter((movie) => {
       if (!movie?.title || typeof movie.title !== 'string') {
         return false;
       }
@@ -80,7 +85,7 @@ export default function MoviesPage({ allMovies: initialMovies }: any) {
   useEffect(() => {
     if (totalPages > 0 && currentPage > totalPages) {
       setCurrentPage(1);
-      const query: any = { page: '1' };
+      const query: Record<string, string> = { page: '1' };
       if (filterLetter) query.filter = filterLetter;
       router.replace({ pathname: router.pathname, query }, undefined, { shallow: true });
     }
@@ -95,7 +100,7 @@ export default function MoviesPage({ allMovies: initialMovies }: any) {
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    const query: any = { page };
+    const query: Record<string, string> = { page: page.toString() };
     if (filterLetter) query.filter = filterLetter;
     router.push({ pathname: router.pathname, query }, undefined, { shallow: true });
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -203,10 +208,6 @@ export default function MoviesPage({ allMovies: initialMovies }: any) {
 
     return pageNumbers;
   };
-  
-  const baseStyle: React.CSSProperties = {
-    color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold', transition: 'all 0.2s ease'
-  };
 
   return (
     <div style={{ 
@@ -277,7 +278,7 @@ export default function MoviesPage({ allMovies: initialMovies }: any) {
         boxSizing: 'border-box',
       }}>
         {movies.length > 0 ? (
-          movies.map((movie: any) => (
+          movies.map((movie) => (
             <MovieCard key={movie.id} movie={movie} />
           ))
         ) : (

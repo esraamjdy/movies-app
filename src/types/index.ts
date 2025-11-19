@@ -73,32 +73,32 @@ export interface TVShowDetails extends TVShow {
   seasons: Season[];
 }
 
-interface ProductionCompany {
+export interface ProductionCompany {
   id: number;
   name: string;
   logo_path: string | null;
   origin_country: string;
 }
 
-interface ProductionCountry {
+export interface ProductionCountry {
   iso_3166_1: string;
   name: string;
 }
 
-interface SpokenLanguage {
+export interface SpokenLanguage {
   english_name: string;
   iso_639_1: string;
   name: string;
 }
 
-interface Network {
+export interface Network {
   id: number;
   name: string;
   logo_path: string | null;
   origin_country: string;
 }
 
-interface Season {
+export interface Season {
   id: number;
   name: string;
   overview: string;
@@ -106,4 +106,39 @@ interface Season {
   season_number: number;
   air_date: string;
   episode_count: number;
+}
+
+export interface CastMember {
+  id: number;
+  name: string;
+  character: string;
+  profile_path: string | null;
+  order: number;
+}
+
+export interface Video {
+  id: string;
+  key: string;
+  name: string;
+  site: string;
+  size: number;
+  type: string;
+  official: boolean;
+  published_at: string;
+}
+
+export interface Credits {
+  cast: CastMember[];
+  crew: unknown[];
+}
+
+export interface MovieDetailsWithCredits extends MovieDetails {
+  credits: Credits;
+  videos: {
+    results: Video[];
+  };
+}
+
+export interface MoviesResponse {
+  results: Movie[];
 }

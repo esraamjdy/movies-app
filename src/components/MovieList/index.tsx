@@ -1,6 +1,11 @@
 import MovieCard from '../MovieCard';
+import { Movie } from '../../types';
 
-export default function MovieList({ movies }: any) {
+interface MovieListProps {
+  movies: Movie[];
+}
+
+export default function MovieList({ movies }: MovieListProps) {
   return (
     <div style={{ 
       display: 'grid',
@@ -13,7 +18,7 @@ export default function MovieList({ movies }: any) {
       width: '100%',
       boxSizing: 'border-box',
     }}>
-      {movies.map((movie:{id: number}) => (
+      {movies.map((movie) => (
         <MovieCard key={movie.id} movie={movie} />
       ))}
     </div>

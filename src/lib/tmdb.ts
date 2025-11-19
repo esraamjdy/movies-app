@@ -1,12 +1,20 @@
+import { Movie, MoviesResponse, MovieDetailsWithCredits, Credits, Video } from '../types';
+
 const API_KEY = process.env.TMDB_API_KEY;
 if (!API_KEY) {
   throw new Error('TMDB_API_KEY is not defined. Please set it in your .env.local file.');
 }
 const BASE_URL = 'https://api.themoviedb.org/3';
 
+interface TMDBResponse extends MoviesResponse {
+  page: number;
+  total_pages: number;
+  total_results: number;
+}
+
 export async function getPopularMovies(page = 1, totalPagesToFetch = 20) {
-  let allMovies: any[] = [];
-  let currentPage = page;
+  let allMovies: Movie[] = [];
+  const currentPage = page;
   let reachedLastPage = false;
 
   const BATCH_SIZE = 5;
@@ -24,10 +32,10 @@ export async function getPopularMovies(page = 1, totalPagesToFetch = 20) {
           if (!response.ok) {
             throw new Error(`Failed to fetch page ${pageToFetch}: ${response.statusText}`);
           }
-          return response.json();
+          return response.json() as Promise<TMDBResponse>;
         }).catch((error) => {
           console.error(`Error fetching page ${pageToFetch}:`, error);
-          return null; 
+          return null as TMDBResponse | null; 
         })
       );
     }
@@ -43,7 +51,8 @@ export async function getPopularMovies(page = 1, totalPagesToFetch = 20) {
         allMovies = allMovies.concat(data.results);
       }
       
-      if (data.page && data.total_pages && data.page >= data.total_pages) {
+      const typedData = data as TMDBResponse;
+      if (typedData.page && typedData.total_pages && typedData.page >= typedData.total_pages) {
         reachedLastPage = true;
         break;
       }
@@ -62,7 +71,7 @@ export async function getPopularMovies(page = 1, totalPagesToFetch = 20) {
 }
 
 export async function getTopRatedMovies(page = 1, totalPagesToFetch = 5) {
-  let allMovies: any[] = [];
+  let allMovies: Movie[] = [];
   for (let i = 1; i <= totalPagesToFetch; i++) {
     const response = await fetch(
       `${BASE_URL}/movie/top_rated?api_key=${API_KEY}&page=${page + i - 1}`,
@@ -71,14 +80,14 @@ export async function getTopRatedMovies(page = 1, totalPagesToFetch = 5) {
     if (!response.ok) {
       throw new Error(`Failed to fetch: ${response.statusText}`);
     }
-    const data = await response.json();
+    const data = await response.json() as TMDBResponse;
     allMovies = allMovies.concat(data.results);
     if (data.page >= data.total_pages) break;
   }
   return { results: allMovies };
 }
 
-export async function getMovieDetails(movieId: number) {
+export async function getMovieDetails(movieId: number): Promise<MovieDetailsWithCredits> {
   const movieResponse = await fetch(
     `${BASE_URL}/movie/${movieId}?api_key=${API_KEY}`,
     { cache: 'no-store' }
@@ -86,7 +95,7 @@ export async function getMovieDetails(movieId: number) {
   if (!movieResponse.ok) {
     throw new Error(`Failed to fetch movie details: ${movieResponse.statusText}`);
   }
-  const movieDetails = await movieResponse.json();
+  const movieDetails = await movieResponse.json() as Omit<MovieDetailsWithCredits, 'credits' | 'videos'>;
 
   const creditsResponse = await fetch(
     `${BASE_URL}/movie/${movieId}/credits?api_key=${API_KEY}`,
@@ -95,7 +104,7 @@ export async function getMovieDetails(movieId: number) {
   if (!creditsResponse.ok) {
     throw new Error(`Failed to fetch credits: ${creditsResponse.statusText}`);
   }
-  const credits = await creditsResponse.json();
+  const credits = await creditsResponse.json() as Credits;
 
   const videosResponse = await fetch(
     `${BASE_URL}/movie/${movieId}/videos?api_key=${API_KEY}`,
@@ -104,7 +113,7 @@ export async function getMovieDetails(movieId: number) {
   if (!videosResponse.ok) {
     throw new Error(`Failed to fetch videos: ${videosResponse.statusText}`);
   }
-  const videos = await videosResponse.json();
+  const videosData = await videosResponse.json() as { results: Video[] };
 
-  return { ...movieDetails, credits, videos };
+  return { ...movieDetails, credits, videos: videosData };
 }

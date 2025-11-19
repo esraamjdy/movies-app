@@ -3,9 +3,14 @@ import { getTopRatedMovies } from '../lib/tmdb';
 import { Header } from '../components/Header';
 import MovieList from '../components/MovieList';
 import Link from 'next/link';
-import { Button } from '../components/Button'; 
+import { Button } from '../components/Button';
+import { Movie } from '../types';
 
-export default function Home({ topRatedMovies: initialTopRatedMovies }: any) {
+interface HomeProps {
+  topRatedMovies: Movie[];
+}
+
+export default function Home({ topRatedMovies: initialTopRatedMovies }: HomeProps) {
   const displayedMovies = initialTopRatedMovies.slice(0, 10);
 
   return (
