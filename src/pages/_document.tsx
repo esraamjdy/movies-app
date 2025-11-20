@@ -4,9 +4,9 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head />
-      <body>
-        <Main />
-        <NextScript />
+      <body style={{ backgroundColor: 'black' }}>
+        <Main style={{ backgroundColor: 'black' }} />
+        <NextScript style={{ backgroundColor: 'black' }} />
       </body>
     </Html>
   );

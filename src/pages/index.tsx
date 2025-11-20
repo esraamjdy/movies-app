@@ -25,8 +25,6 @@ export default function Home({ topRatedMovies: initialTopRatedMovies }: HomeProp
       
       <div style={{ 
         textAlign: 'center', 
-        padding: 'clamp(30px, 5vw, 60px) clamp(15px, 4vw, 40px)',
-        maxWidth: '1400px',
         margin: '0 auto',
         width: '100%',
         boxSizing: 'border-box',

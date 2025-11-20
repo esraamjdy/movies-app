@@ -32,21 +32,24 @@ export default function MovieDetail({ movie }: MovieDetailProps) {
     alignItems: 'flex-start',
     marginBottom: 'clamp(40px, 6vw, 60px)',
     marginTop: 'clamp(20px, 3vw, 30px)',
+    backgroundColor: '#1e1e1e',
   };
 
   const posterStyle: React.CSSProperties = {
     width: '100%',
     maxWidth: 'clamp(250px, 40vw, 350px)',
-    height: 'auto',
+    height: '100',
     aspectRatio: '2/3',
     borderRadius: '15px',
     objectFit: 'cover',
     boxShadow: '0 5px 20px rgba(0, 0, 0, 0.4)',
+    padding: 'clamp(5px, 1vw, 10px)',
   };
 
   const detailsColumnStyle: React.CSSProperties = {
     flex: '1',
     minWidth: 'min(100%, 400px)',
+    padding: 'clamp(10px, 2vw, 20px)',
   };
 
   const titleStyle: React.CSSProperties = {
@@ -112,7 +115,7 @@ export default function MovieDetail({ movie }: MovieDetailProps) {
 
   const infoItemContentStyle: React.CSSProperties = {
     color: '#ccc',
-    margin: '0',
+    margin: '2px 0 0 0',
     fontSize: 'clamp(15px, 2.5vw, 17px)',
   };
 
@@ -323,7 +326,7 @@ export default function MovieDetail({ movie }: MovieDetailProps) {
         {otherVideos && otherVideos.length > 0 && (
           <div style={{ marginTop: 'clamp(40px, 6vw, 50px)' }}>
             <h2 style={sectionTitleStyle}>Other Clips & Videos</h2>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 300px), 1fr))', gap: 'clamp(15px, 3vw, 20px)' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 300px), 1fr))', gap: 'clamp(15px, 3vw, 20px)'}}>
               {otherVideos.map((video: Video) => (
                 <div 
                   key={video.key} 

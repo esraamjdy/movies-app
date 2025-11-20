@@ -222,15 +222,15 @@ export default function MoviesPage({ allMovies: initialMovies }: MoviesPageProps
     }}>
 
       <div style={{ 
-        padding: 'clamp(20px, 4vw, 40px)',
         maxWidth: '1400px',
         margin: '0 auto',
         width: '100%',
         boxSizing: 'border-box',
+        marginTop: 'clamp(20px, 3vw, 40px)',
       }}>
         <Link href="/" passHref>
           <Button>
-            ← Back to Home
+            Back to Home
           </Button>
         </Link>
   
@@ -271,8 +271,6 @@ export default function MoviesPage({ allMovies: initialMovies }: MoviesPageProps
         gridTemplateColumns: 'repeat(auto-fill, minmax(clamp(140px, 20vw, 160px), 240px))',
         justifyContent: 'center',
         gap: 'clamp(15px, 3vw, 25px)',
-        padding: 'clamp(15px, 3vw, 25px)',
-        maxWidth: '1400px',
         margin: '0 auto',
         width: '100%',
         boxSizing: 'border-box',
@@ -296,7 +294,6 @@ export default function MoviesPage({ allMovies: initialMovies }: MoviesPageProps
           justifyContent: 'center', 
           gap: 'clamp(8px, 1.5vw, 10px)', 
           padding: '0 clamp(15px, 4vw, 40px)',
-          maxWidth: '1400px',
           marginLeft: 'auto',
           marginRight: 'auto',
           width: '100%',
